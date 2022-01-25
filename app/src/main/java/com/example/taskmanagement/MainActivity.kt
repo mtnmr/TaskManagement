@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
     val title = arrayListOf<String>(
         "ToDo",
         "WIP",
-        "All"
+        "ALL"
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,6 +43,7 @@ class MainActivity : AppCompatActivity() {
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             tab.text = title[position]
         }.attach()
+
 
 //        _adapterTab = PageAdapter(supportFragment Manager, this)
 //        binding.pager.adapter = _adapterTab
