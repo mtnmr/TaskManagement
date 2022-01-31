@@ -1,6 +1,7 @@
 package com.example.taskmanagement
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
@@ -14,20 +15,23 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.taskmanagement.databinding.ActivityMainBinding
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import io.realm.Realm
 
 class MainActivity : AppCompatActivity() {
 
 //    private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
 
-//    private var _adapterTab : PageAdapter? = null
     private lateinit var viewPager: ViewPager2
 
-    val title = arrayListOf<String>(
+    private val title = arrayListOf<String>(
         "ToDo",
         "WIP",
         "ALL"
     )
+
+    private lateinit var realm: Realm
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,19 +49,22 @@ class MainActivity : AppCompatActivity() {
         }.attach()
 
 
-//        _adapterTab = PageAdapter(supportFragment Manager, this)
-//        binding.pager.adapter = _adapterTab
-//        binding.tabLayout.setupWithViewPager(binding.pager)
+        realm = Realm.getDefaultInstance()
 
-//        val navController = findNavController(R.id.nav_host_fragment_content_main)
-//        appBarConfiguration = AppBarConfiguration(navController.graph)
-//        setupActionBarWithNavController(navController, appBarConfiguration)
-
-//        binding.fab.setOnClickListener { view ->
-//            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                .setAction("Action", null).show()
+        binding.fab.setOnClickListener { view ->
+            val intent = Intent(this, EditActivity::class.java)
+            startActivity(intent)
         }
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        realm.close()
+    }
+}
+
+
+
 
 
 

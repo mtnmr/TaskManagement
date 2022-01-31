@@ -6,40 +6,51 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import io.realm.Realm
 import kotlin.String as String1
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [TodoFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class TodoFragment() : Fragment() {
-    // TODO: Rename and change types of parameters
-//    private var param1: String? = null
-//    private var param2: String? = null
-//
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//        arguments?.let {
-//            param1 = it.getString(ARG_PARAM1)
-//            param2 = it.getString(ARG_PARAM2)
-//        }
-//    }
+    private lateinit var adapter:CustomRecyclerViewAdapter
+    private lateinit var layoutManager: RecyclerView.LayoutManager
+
+    private lateinit var realm: Realm
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        realm = Realm.getDefaultInstance()
+
+        val view = inflater.inflate(R.layout.fragment_todo, container, false)
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_todo, container, false)
+        val myRecyclerView = view.findViewById<RecyclerView>(R.id.recyclerview1)
+        layoutManager = LinearLayoutManager(view.context)
+        myRecyclerView.layoutManager = layoutManager
+
+        return view
+    }
+
+    override fun onStart() {
+        super.onStart()
+        val realmResults = realm.where(Todo::class.java)
+            .equalTo("status", "TODO")
+            .findAll()
+
+        val myRecyclerView = view!!.findViewById<RecyclerView>(R.id.recyclerview1)
+        adapter = CustomRecyclerViewAdapter(realmResults)
+        myRecyclerView.adapter = this.adapter
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        realm.close()
     }
 
 

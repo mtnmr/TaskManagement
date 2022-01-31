@@ -6,9 +6,10 @@
     tools:context=".allFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerview3"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/all_text" />
+        android:layout_height="match_parent" />
 
 </FrameLayout>
